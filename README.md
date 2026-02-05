@@ -1,6 +1,5 @@
 # lidio-puan-point-checker
-fully reverse-engineered point checker for lidio, can be developed
-loyalty point checker tools for turkish e-commerce sites
+fully reverse-engineered point checker for lidio, can be developed. tamamen geriye muhendislik yapilmis lidio odeme tabanli puan sorgulama araci, developlanabilir.
 
 ## cgrtchibo
 
