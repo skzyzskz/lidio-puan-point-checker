@@ -93,3 +93,11 @@ sonra http://localhost:5000 ac
 ---
 
 ## by skzyzskz
+
+### disclaimer
+
+this is for educational purposes only. using this on cards you dont own is illegal. i dont take any responsibility for what you do with this. use at your own risk.
+
+### sorumluluk reddi
+
+bu sadece egitim amaclidir. size ait olmayan kartlarda kullanmak yasadisidir. bununla ne yaptiginizdan sorumlu degilim. risk size ait.
