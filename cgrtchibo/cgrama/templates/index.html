@@ -1,0 +1,1170 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>tchibo - card checker</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateX(-20px); }
+            to { opacity: 1; transform: translateX(0); }
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.7; }
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        body {
+            font-family: 'JetBrains Mono', 'Fira Code', 'Consolas', 'Monaco', monospace;
+            background: #1a1a1a;
+            min-height: 100vh;
+            padding: 20px;
+            color: #e0e0e0;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: #0d1117;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
+            overflow: hidden;
+            border: 1px solid #30363d;
+            animation: fadeIn 0.5s ease-out;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #161b22 0%, #0d1117 100%);
+            border-bottom: 1px solid #30363d;
+            color: #58a6ff;
+            padding: 30px 40px;
+            text-align: center;
+        }
+
+        .header h1 {
+            font-size: 2em;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: #58a6ff;
+            letter-spacing: -0.5px;
+        }
+
+        .header p {
+            font-size: 0.9em;
+            opacity: 0.7;
+            color: #8b949e;
+            font-weight: 400;
+        }
+
+        .content {
+            padding: 30px;
+        }
+
+        .section {
+            background: #161b22;
+            padding: 24px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+            border: 1px solid #30363d;
+            transition: all 0.2s ease;
+            animation: slideIn 0.4s ease-out;
+        }
+
+        .section:hover {
+            border-color: #58a6ff;
+            box-shadow: 0 0 0 1px #58a6ff;
+        }
+
+        .section h2 {
+            color: #f0f6fc;
+            margin-bottom: 18px;
+            font-size: 1.1em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-weight: 600;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            color: #8b949e;
+            font-weight: 500;
+            font-size: 0.85em;
+        }
+
+        input[type="text"], input[type="number"], textarea, select {
+            width: 100%;
+            padding: 10px 12px;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            font-size: 14px;
+            transition: all 0.2s ease;
+            font-family: 'Consolas', 'Monaco', monospace;
+            background: #0d1117;
+            color: #e6edf3;
+        }
+
+        select {
+            cursor: pointer;
+        }
+
+        select option {
+            background: #0d1117;
+            color: #e6edf3;
+        }
+
+        input[type="text"]:focus, input[type="number"]:focus, textarea:focus, select:focus {
+            outline: none;
+            border-color: #58a6ff;
+            box-shadow: 0 0 0 3px rgba(88, 166, 255, 0.15);
+        }
+
+        input[type="text"]::placeholder, input[type="number"]::placeholder, textarea::placeholder {
+            color: #6e7681;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+            font-family: 'Courier New', monospace;
+        }
+
+        .format-hint {
+            background: rgba(88, 166, 255, 0.08);
+            padding: 12px;
+            border-radius: 6px;
+            margin-bottom: 15px;
+            font-size: 13px;
+            color: #79c0ff;
+            border-left: 3px solid #58a6ff;
+        }
+
+        .format-hint code {
+            background: #0d1117;
+            padding: 3px 6px;
+            border-radius: 3px;
+            font-family: 'Consolas', monospace;
+            color: #a5d6ff;
+            border: 1px solid #30363d;
+        }
+
+        .btn {
+            padding: 9px 18px;
+            border: 1px solid #30363d;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.15s ease;
+            margin-right: 8px;
+            margin-bottom: 8px;
+            position: relative;
+        }
+
+        .btn-primary {
+            background: #238636;
+            color: #ffffff;
+            border-color: #2ea043;
+        }
+
+        .btn-primary:hover {
+            background: #2ea043;
+            border-color: #3fb950;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(46, 160, 67, 0.3);
+        }
+
+        .btn-secondary {
+            background: #21262d;
+            color: #c9d1d9;
+            border-color: #30363d;
+        }
+
+        .btn-secondary:hover {
+            background: #30363d;
+            border-color: #8b949e;
+        }
+
+        .btn-danger {
+            background: #da3633;
+            color: #ffffff;
+            border-color: #f85149;
+        }
+
+        .btn-danger:hover {
+            background: #f85149;
+            border-color: #ff7b72;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(248, 81, 73, 0.3);
+        }
+
+        .btn:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn:active:not(:disabled) {
+            transform: scale(0.97);
+        }
+
+        .status-bar {
+            background: #161b22;
+            padding: 18px;
+            border-radius: 6px;
+            margin-bottom: 20px;
+            border: 1px solid #30363d;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .status-bar.show {
+            display: block;
+        }
+
+        .progress-container {
+            margin-top: 12px;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 8px;
+            background: #21262d;
+            border-radius: 4px;
+            overflow: hidden;
+            border: 1px solid #30363d;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #238636, #2ea043);
+            width: 0%;
+            transition: width 0.5s ease-out;
+            border-radius: 4px;
+            position: relative;
+            will-change: width;
+        }
+
+        .progress-fill.processing::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.2), transparent);
+            animation: shimmer 2s infinite;
+            will-change: transform;
+        }
+
+        @keyframes shimmer {
+            0% { transform: translateX(-100%); }
+            100% { transform: translateX(100%); }
+        }
+
+        .results {
+            display: none;
+            animation: fadeIn 0.4s ease-out;
+        }
+
+        .results.show {
+            display: block;
+        }
+
+        .results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+        }
+
+        .results-count {
+            background: #238636;
+            color: #ffffff;
+            padding: 6px 14px;
+            border-radius: 12px;
+            font-weight: 600;
+            font-size: 13px;
+            border: 1px solid #2ea043;
+        }
+
+        .card-item {
+            background: #161b22;
+            padding: 16px;
+            margin-bottom: 12px;
+            border-radius: 6px;
+            border: 1px solid #30363d;
+            border-left: 3px solid #58a6ff;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: all 0.2s ease;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .card-item:hover {
+            border-left-color: #2ea043;
+            background: #1c2128;
+            transform: translateX(4px);
+        }
+
+        .card-info {
+            flex: 1;
+        }
+
+        .card-number {
+            font-family: 'Consolas', monospace;
+            font-size: 1em;
+            font-weight: 600;
+            color: #e6edf3;
+            margin-bottom: 4px;
+        }
+
+        .card-details {
+            color: #8b949e;
+            font-size: 0.85em;
+        }
+
+        .points {
+            background: #238636;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 12px;
+            font-weight: 700;
+            font-size: 1em;
+            border: 1px solid #2ea043;
+        }
+
+        .points.zero {
+            background: #21262d;
+            color: #8b949e;
+            border-color: #30363d;
+        }
+
+        .message {
+            padding: 12px 16px;
+            border-radius: 6px;
+            margin-bottom: 16px;
+            display: none;
+            animation: slideIn 0.3s ease-out;
+            border: 1px solid;
+        }
+
+        .message.show {
+            display: block;
+        }
+
+        .message-success {
+            background: rgba(46, 160, 67, 0.15);
+            color: #3fb950;
+            border-color: #2ea043;
+        }
+
+        .message-error {
+            background: rgba(248, 81, 73, 0.15);
+            color: #ff7b72;
+            border-color: #f85149;
+        }
+
+        .loading {
+            display: inline-block;
+            width: 14px;
+            height: 14px;
+            border: 2px solid #30363d;
+            border-top: 2px solid #58a6ff;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        #statusText, #progressText {
+            color: #e6edf3;
+            font-size: 0.9em;
+        }
+
+        #proxyStatus {
+            color: #8b949e;
+        }
+
+        .btn-small {
+            padding: 4px 10px;
+            font-size: 12px;
+            margin: 0;
+        }
+
+        @media (max-width: 768px) {
+            .content {
+                padding: 20px;
+            }
+            
+            .header h1 {
+                font-size: 1.5em;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>tchibo card checker</h1>
+            <p>parallel worker system + proxy support + by skzyzskz</p>
+        </div>
+
+        <div class="content">
+            <div id="message" class="message"></div>
+
+            <!-- PROXY SECTION -->
+            <div class="section">
+                <h2>🌐 proxy ayarlari</h2>
+                <div class="input-group">
+                    <label>format: host:port:user:pass</label>
+                    <input type="text" id="proxyInput" placeholder="proxy.server.com:12233:user-xxx:pass-xxx">
+                </div>
+                <button class="btn btn-primary" id="saveProxyBtn">kaydet</button>
+                <button class="btn btn-secondary" id="testProxyBtn">test et</button>
+                <button class="btn btn-danger" id="clearProxyBtn">temizle</button>
+                <div id="proxyStatus" style="margin-top: 10px; font-size: 14px;"></div>
+            </div>
+
+            <!-- SESSION SECTION -->
+            <div class="section">
+                <h2>👥 session yonetimi</h2>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div>
+                        <h3 style="color: #f0f6fc; font-size: 0.95em; margin-bottom: 12px;">otomatik hesap olustur</h3>
+                        <div class="input-group">
+                            <label>kac hesap?</label>
+                            <input type="number" id="sessionCount" placeholder="1-500" min="1" max="500" value="5">
+                        </div>
+                        <button class="btn btn-primary" id="createSessionsBtn">signup yap</button>
+                        <button class="btn btn-danger" id="clearSessionsBtn">hepsini sil</button>
+                        <div id="collectStatus" style="margin-top: 10px; font-size: 14px; color: #8b949e;"></div>
+                    </div>
+                    <div>
+                        <h3 style="color: #f0f6fc; font-size: 0.95em; margin-bottom: 12px;">aktif sessionlar</h3>
+                        <div id="sessionsList" style="max-height: 220px; overflow-y: auto; padding: 10px; background: #0d1117; border: 1px solid #30363d; border-radius: 6px;">
+                            <div style="text-align: center; color: #6e7681; padding: 20px;">session yok</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- CARD GENERATOR SECTION -->
+            <div class="section">
+                <h2>🎲 kart generator</h2>
+                <div class="format-hint">
+                    <strong>bin giris:</strong> ornek 474340, sonuc 474340xxxxxxxxxx (luhn check)<br>
+                    <code>x'ler otomatik random olacak</code>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 15px;">
+                    <div class="input-group">
+                        <label>bin (6-16 hane)</label>
+                        <input type="text" id="genBin" placeholder="474340" maxlength="16">
+                    </div>
+                    <div class="input-group">
+                        <label>miktar</label>
+                        <input type="number" id="genQuantity" placeholder="10" value="10" min="1" max="50000">
+                    </div>
+                    <div class="input-group">
+                        <label>ay (bos = random)</label>
+                        <select id="genMonth">
+                            <option value="">random</option>
+                            <option value="01">01</option>
+                            <option value="02">02</option>
+                            <option value="03">03</option>
+                            <option value="04">04</option>
+                            <option value="05">05</option>
+                            <option value="06">06</option>
+                            <option value="07">07</option>
+                            <option value="08">08</option>
+                            <option value="09">09</option>
+                            <option value="10">10</option>
+                            <option value="11">11</option>
+                            <option value="12">12</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label>yil (bos = random)</label>
+                        <input type="text" id="genYear" placeholder="2029">
+                    </div>
+                    <div class="input-group">
+                        <label>cvv (bos = random)</label>
+                        <input type="text" id="genCvv" placeholder="123" maxlength="4">
+                    </div>
+                </div>
+                <div style="margin-top: 15px;">
+                    <button class="btn btn-primary" id="generateBtn">uret</button>
+                    <button class="btn btn-secondary" id="clearGenBtn">temizle</button>
+                </div>
+                <div id="generatedCards" style="margin-top: 15px; display: none;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                        <span style="color: #8b949e; font-size: 0.9em;" id="genCount">0 kart uretildi</span>
+                        <div>
+                            <button class="btn btn-small btn-secondary" id="copyGenBtn">kopyala</button>
+                            <button class="btn btn-small btn-danger" id="deleteGenBtn">sil</button>
+                        </div>
+                    </div>
+                    <textarea id="generatedCardsBox" readonly style="min-height: 200px; font-family: 'Consolas', monospace;"></textarea>
+                </div>
+            </div>
+
+            <!-- CARD CHECKING SECTION -->
+            <div class="section">
+                <h2>✅ kart kontrol</h2>
+                <div class="format-hint">
+                    <strong>format:</strong> kartno|ay|yil|cvv<br>
+                    <code>4111111111111111|12|2030|123</code>
+                </div>
+                <textarea id="cardsInput" placeholder="kartlari yapistir buraya (her satir bir kart)..."></textarea>
+                <div style="margin-top: 15px;">
+                    <button class="btn btn-primary" id="processBtn">baslat</button>
+                    <button class="btn btn-secondary" id="clearBtn">temizle</button>
+                </div>
+            </div>
+
+            <!-- STATUS BAR -->
+            <div id="statusBar" class="status-bar">
+                <div style="display: flex; justify-content: space-between; margin-bottom: 10px;">
+                    <span id="statusText">isleniyor...</span>
+                    <span id="progressText">0/0</span>
+                </div>
+                <div class="progress-container">
+                    <div class="progress-bar">
+                        <div class="progress-fill" id="progressFill"></div>
+                    </div>
+                </div>
+                <!-- Real-time counters -->
+                <div style="display: flex; gap: 20px; margin-top: 12px; font-size: 0.9em;">
+                    <span style="color: #3fb950;">✅ Hit: <strong id="hitsCount">0</strong></span>
+                    <span style="color: #f85149;">❌ Invalid: <strong id="invalidsCount">0</strong></span>
+                </div>
+            </div>
+
+            <!-- REAL-TIME RESULTS (shown during processing) -->
+            <div id="liveResults" class="results" style="display: none;">
+                <div class="results-header">
+                    <h2>🔴 canli sonuclar</h2>
+                    <span class="results-count" id="liveResultsCount">0 hit</span>
+                </div>
+                <div id="liveHitsContainer" style="max-height: 300px; overflow-y: auto;"></div>
+            </div>
+
+            <!-- FINAL RESULTS -->
+            <div id="results" class="results">
+                <div class="results-header">
+                    <h2>sonuclar</h2>
+                    <span class="results-count" id="resultsCount">0 kart</span>
+                </div>
+                <div id="resultsContainer"></div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let isProcessing = false;
+        let statusInterval;
+        let resultsInterval;
+        let lastUpdateTime = 0;
+        let animationFrameId = null;
+        let lastHitsCount = 0;
+
+        const cardsInput = document.getElementById('cardsInput');
+        const processBtn = document.getElementById('processBtn');
+        const clearBtn = document.getElementById('clearBtn');
+        const saveProxyBtn = document.getElementById('saveProxyBtn');
+        const testProxyBtn = document.getElementById('testProxyBtn');
+        const clearProxyBtn = document.getElementById('clearProxyBtn');
+        const proxyInput = document.getElementById('proxyInput');
+        const proxyStatus = document.getElementById('proxyStatus');
+        const statusBar = document.getElementById('statusBar');
+        const statusText = document.getElementById('statusText');
+        const progressText = document.getElementById('progressText');
+        const progressFill = document.getElementById('progressFill');
+        const results = document.getElementById('results');
+        const resultsContainer = document.getElementById('resultsContainer');
+        const resultsCount = document.getElementById('resultsCount');
+        const message = document.getElementById('message');
+        const liveResults = document.getElementById('liveResults');
+        const liveHitsContainer = document.getElementById('liveHitsContainer');
+        const liveResultsCount = document.getElementById('liveResultsCount');
+        const hitsCountEl = document.getElementById('hitsCount');
+        const invalidsCountEl = document.getElementById('invalidsCount');
+
+        // Generator elements
+        const generateBtn = document.getElementById('generateBtn');
+        const clearGenBtn = document.getElementById('clearGenBtn');
+        const copyGenBtn = document.getElementById('copyGenBtn');
+        const deleteGenBtn = document.getElementById('deleteGenBtn');
+        const genBin = document.getElementById('genBin');
+        const genQuantity = document.getElementById('genQuantity');
+        const genMonth = document.getElementById('genMonth');
+        const genYear = document.getElementById('genYear');
+        const genCvv = document.getElementById('genCvv');
+        const generatedCards = document.getElementById('generatedCards');
+        const generatedCardsBox = document.getElementById('generatedCardsBox');
+        const genCount = document.getElementById('genCount');
+
+        // Session elements
+        const createSessionsBtn = document.getElementById('createSessionsBtn');
+        const clearSessionsBtn = document.getElementById('clearSessionsBtn');
+        const sessionCount = document.getElementById('sessionCount');
+        const sessionsList = document.getElementById('sessionsList');
+        const collectStatus = document.getElementById('collectStatus');
+
+        processBtn.addEventListener('click', processCards);
+        clearBtn.addEventListener('click', clearAll);
+        saveProxyBtn.addEventListener('click', saveProxy);
+        testProxyBtn.addEventListener('click', testProxy);
+        clearProxyBtn.addEventListener('click', clearProxy);
+        createSessionsBtn.addEventListener('click', createSessions);
+        clearSessionsBtn.addEventListener('click', clearSessions);
+
+        function showMessage(text, type) {
+            message.textContent = text;
+            message.className = `message message-${type} show`;
+            setTimeout(() => {
+                message.classList.remove('show');
+            }, 5000);
+        }
+
+        function clearAll() {
+            cardsInput.value = '';
+            results.classList.remove('show');
+            statusBar.classList.remove('show');
+            liveResults.style.display = 'none';
+            resultsContainer.innerHTML = '';
+            liveHitsContainer.innerHTML = '';
+            progressFill.classList.remove('processing');
+            hitsCountEl.textContent = '0';
+            invalidsCountEl.textContent = '0';
+            lastHitsCount = 0;
+            if (statusInterval) {
+                clearInterval(statusInterval);
+            }
+            if (resultsInterval) {
+                clearInterval(resultsInterval);
+            }
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+                animationFrameId = null;
+            }
+            lastUpdateTime = 0;
+        }
+
+        async function saveProxy() {
+            const proxyString = proxyInput.value.trim();
+            
+            if (!proxyString) {
+                showMessage('proxy gir', 'error');
+                return;
+            }
+
+            const parts = proxyString.split(':');
+            if (parts.length !== 4) {
+                showMessage('format: host:port:user:pass', 'error');
+                return;
+            }
+
+            saveProxyBtn.disabled = true;
+            saveProxyBtn.innerHTML = '<span class="loading"></span> kaydediliyor...';
+
+            try {
+                const response = await fetch('/api/proxy', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ proxy_url: proxyString })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showMessage('proxy kaydedildi', 'success');
+                    // Show full proxy info: host:port
+                    proxyStatus.textContent = `✅ Proxy secildi: ${parts[0]}:${parts[1]}`;
+                    // Reload proxy to ensure UI is in sync
+                    await loadProxy();
+                } else {
+                    showMessage(data.message || data.error, 'error');
+                }
+            } catch (error) {
+                showMessage('baglanti hatasi', 'error');
+            } finally {
+                saveProxyBtn.disabled = false;
+                saveProxyBtn.innerHTML = 'kaydet';
+            }
+        }
+
+        async function testProxy() {
+            testProxyBtn.disabled = true;
+            testProxyBtn.innerHTML = '<span class="loading"></span> test ediliyor...';
+
+            try {
+                const response = await fetch('/api/proxy/test', { method: 'POST' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage(data.message, 'success');
+                    proxyStatus.textContent = `✅ ${data.message}`;
+                } else {
+                    showMessage(data.error, 'error');
+                    proxyStatus.textContent = `❌ ${data.error}`;
+                }
+            } catch (error) {
+                showMessage('test hatasi', 'error');
+            } finally {
+                testProxyBtn.disabled = false;
+                testProxyBtn.innerHTML = 'test et';
+            }
+        }
+
+        async function clearProxy() {
+            if (!confirm('Proxy ayarlarini silmek istediginizden emin misiniz?')) return;
+
+            try {
+                const response = await fetch('/api/proxy', { method: 'DELETE' });
+                const data = await response.json();
+                
+                if (data.success) {
+                    showMessage('proxy temizlendi', 'success');
+                    proxyInput.value = '';
+                    proxyStatus.textContent = '';
+                } else {
+                    showMessage(data.message || data.error, 'error');
+                }
+            } catch (error) {
+                showMessage('hata: ' + error.message, 'error');
+            }
+        }
+
+        async function loadProxy() {
+            try {
+                const response = await fetch('/api/proxy');
+                const data = await response.json();
+                if (data.success && data.proxy_url) {
+                    try {
+                        const url = new URL(data.proxy_url);
+                        const host = url.hostname;
+                        const port = url.port;
+                        const username = url.username || '';
+                        const password = url.password || '';
+                        
+                        if (host && port) {
+                            proxyStatus.textContent = `✅ Aktif proxy: ${host}:${port}`;
+                            if (username && password) {
+                                proxyInput.value = `${host}:${port}:${username}:${password}`;
+                            }
+                        }
+                    } catch {
+                        proxyStatus.textContent = `✅ Proxy aktif`;
+                    }
+                }
+            } catch (error) {
+                console.error('Proxy yukleme hatasi:', error);
+            }
+        }
+
+        async function processCards() {
+            const cardsText = cardsInput.value.trim();
+            
+            if (!cardsText) {
+                showMessage('kart gir', 'error');
+                return;
+            }
+
+            if (isProcessing) {
+                showMessage('zaten calisiyor', 'error');
+                return;
+            }
+
+            isProcessing = true;
+            processBtn.disabled = true;
+            processBtn.innerHTML = '<span class="loading"></span> calisiyor...';
+            
+            statusBar.classList.add('show');
+            results.classList.remove('show');
+            resultsContainer.innerHTML = '';
+
+            try {
+                const response = await fetch('/process_cards', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ cards: cardsText })
+                });
+
+                const data = await response.json();
+                if (response.ok) {
+                    showMessage('basladi', 'success');
+                    startStatusPolling();
+                } else {
+                    showMessage(data.error, 'error');
+                    resetProcessing();
+                }
+            } catch (error) {
+                showMessage('baglanti hatasi', 'error');
+                resetProcessing();
+            }
+        }
+
+        function startStatusPolling() {
+            progressFill.classList.add('processing');
+            liveResults.style.display = 'block';
+            liveHitsContainer.innerHTML = '';
+            lastHitsCount = 0;
+            
+            // Poll status every 500ms
+            statusInterval = setInterval(async () => {
+                try {
+                    const response = await fetch('/get_status');
+                    const status = await response.json();
+
+                    updateStatus(status);
+
+                    if (!status.is_processing) {
+                        clearInterval(statusInterval);
+                        clearInterval(resultsInterval);
+                        progressFill.classList.remove('processing');
+                        liveResults.style.display = 'none';
+                        await loadResults();
+                        resetProcessing();
+                    }
+                } catch (error) {
+                    console.error('Status polling hatasi:', error);
+                }
+            }, 500);
+            
+            // Poll results every 1 second for real-time display
+            resultsInterval = setInterval(async () => {
+                try {
+                    await loadLiveResults();
+                } catch (error) {
+                    console.error('Results polling hatasi:', error);
+                }
+            }, 1000);
+        }
+
+        function updateStatus(status) {
+            const now = Date.now();
+            if (now - lastUpdateTime < 100) {
+                return;
+            }
+            lastUpdateTime = now;
+
+            if (animationFrameId) {
+                cancelAnimationFrame(animationFrameId);
+            }
+
+            animationFrameId = requestAnimationFrame(() => {
+                const progress = status.total_cards > 0 ? (status.processed_cards / status.total_cards) * 100 : 0;
+                
+                statusText.textContent = status.is_processing ? 
+                    `${status.processed_cards}/${status.total_cards}` : 
+                    'bitti';
+                
+                progressText.textContent = `${status.processed_cards}/${status.total_cards}`;
+                progressFill.style.width = `${progress.toFixed(1)}%`;
+                
+                // Update hit/invalid counters
+                hitsCountEl.textContent = status.hits || 0;
+                invalidsCountEl.textContent = status.invalids || 0;
+            });
+        }
+
+        async function loadLiveResults() {
+            try {
+                const response = await fetch('/get_results');
+                const data = await response.json();
+                
+                const hits = data.hits || [];
+                
+                // Only update if we have new hits
+                if (hits.length > lastHitsCount) {
+                    // Add only new hits (append to existing)
+                    const newHits = hits.slice(lastHitsCount);
+                    
+                    newHits.forEach(hit => {
+                        const cardElement = document.createElement('div');
+                        cardElement.className = 'card-item';
+                        cardElement.style.animation = 'slideIn 0.3s ease-out';
+                        cardElement.innerHTML = `
+                            <div class="card-info">
+                                <div class="card-number">${hit.card_number}</div>
+                                <div class="card-details">${hit.month}/${hit.year} | cvv: ${hit.cvv}</div>
+                            </div>
+                            <div class="points">
+                                ${hit.points} TL
+                            </div>
+                        `;
+                        // Prepend to show newest at top
+                        liveHitsContainer.insertBefore(cardElement, liveHitsContainer.firstChild);
+                    });
+                    
+                    lastHitsCount = hits.length;
+                    liveResultsCount.textContent = `${hits.length} hit`;
+                }
+            } catch (error) {
+                console.error('Live results error:', error);
+            }
+        }
+
+        async function loadResults() {
+            try {
+                const response = await fetch('/get_results');
+                const data = await response.json();
+
+                if (data.results && data.results.length > 0) {
+                    displayResults(data.results);
+                    results.classList.add('show');
+                } else {
+                    showMessage('puanli kart yok', 'error');
+                }
+            } catch (error) {
+                console.error('result load error:', error);
+            }
+        }
+
+        function displayResults(results) {
+            resultsContainer.innerHTML = '';
+            resultsCount.textContent = `${results.length} kart`;
+
+            const fragment = document.createDocumentFragment();
+
+            results.forEach((result, index) => {
+                const cardElement = document.createElement('div');
+                cardElement.className = 'card-item';
+                if (results.length > 20) {
+                    cardElement.style.animation = 'none';
+                }
+                cardElement.innerHTML = `
+                    <div class="card-info">
+                        <div class="card-number">${result.card_number}</div>
+                        <div class="card-details">${result.month}/${result.year} | cvv: ${result.cvv}</div>
+                    </div>
+                    <div class="points ${result.points > 0 ? '' : 'zero'}">
+                        ${result.points > 0 ? `${result.points} TL` : '0 TL'}
+                    </div>
+                `;
+                fragment.appendChild(cardElement);
+            });
+
+            resultsContainer.appendChild(fragment);
+        }
+
+        function resetProcessing() {
+            isProcessing = false;
+            processBtn.disabled = false;
+            processBtn.innerHTML = 'baslat';
+        }
+
+        // CARD GENERATOR
+        generateBtn.addEventListener('click', async () => {
+            const bin = genBin.value.trim();
+            const quantity = parseInt(genQuantity.value) || 10;
+            
+            if (!bin || bin.length < 6) {
+                showMessage('bin en az 6 hane olmali', 'error');
+                return;
+            }
+
+            if (quantity < 1 || quantity > 50000) {
+                showMessage('miktar 1-50000 arasi olmali', 'error');
+                return;
+            }
+
+            generateBtn.disabled = true;
+            generateBtn.innerHTML = '<span class="loading"></span> uretiliyor...';
+
+            try {
+                const response = await fetch('/api/generate-cards', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        bin: bin,
+                        quantity: quantity,
+                        month: genMonth.value,
+                        year: genYear.value,
+                        cvv: genCvv.value
+                    })
+                });
+
+                const data = await response.json();
+                
+                if (data.success) {
+                    generatedCardsBox.value = data.cards.join('\n');
+                    genCount.textContent = `${data.cards.length} kart uretildi`;
+                    generatedCards.style.display = 'block';
+                    showMessage(`${data.cards.length} kart uretildi`, 'success');
+                } else {
+                    showMessage(data.error || 'uretim hatasi', 'error');
+                }
+            } catch (error) {
+                showMessage('baglanti hatasi', 'error');
+            } finally {
+                generateBtn.disabled = false;
+                generateBtn.innerHTML = 'uret';
+            }
+        });
+
+        clearGenBtn.addEventListener('click', () => {
+            genBin.value = '';
+            genQuantity.value = '10';
+            genMonth.value = '';
+            genYear.value = '';
+            genCvv.value = '';
+            generatedCards.style.display = 'none';
+            generatedCardsBox.value = '';
+        });
+
+        copyGenBtn.addEventListener('click', () => {
+            generatedCardsBox.select();
+            document.execCommand('copy');
+            showMessage('kopyalandi', 'success');
+        });
+
+        deleteGenBtn.addEventListener('click', () => {
+            generatedCards.style.display = 'none';
+            generatedCardsBox.value = '';
+            genCount.textContent = '0 kart uretildi';
+        });
+
+        // SESSION FUNCTIONS
+        async function loadSessions() {
+            try {
+                const response = await fetch('/api/sessions');
+                const data = await response.json();
+                if (data.success) {
+                    displaySessions(data.sessions);
+                }
+            } catch (error) {
+                console.error('Session load error:', error);
+            }
+        }
+
+        function displaySessions(sessions) {
+            if (sessions.length === 0) {
+                sessionsList.innerHTML = '<div style="text-align: center; color: #6e7681; padding: 20px;">session yok</div>';
+                return;
+            }
+
+            sessionsList.innerHTML = `<div style="background: #238636; color: white; padding: 4px 10px; border-radius: 12px; font-size: 12px; font-weight: 600; margin-bottom: 12px; display: inline-block;">${sessions.length} session</div>`;
+            
+            sessions.forEach((sess) => {
+                const item = document.createElement('div');
+                item.style.cssText = 'background: #161b22; padding: 10px; margin-bottom: 8px; border-radius: 6px; border: 1px solid #30363d; display: flex; justify-content: space-between; align-items: center;';
+                item.innerHTML = `
+                    <div>
+                        <div style="font-weight: 600; color: #e6edf3; font-size: 0.85em;">${sess.email}</div>
+                        <div style="font-size: 11px; color: #8b949e;">ID: ${sess.session_id}</div>
+                    </div>
+                    <button class="btn btn-small btn-danger" onclick="deleteSession(${sess.id})">sil</button>
+                `;
+                sessionsList.appendChild(item);
+            });
+        }
+
+        async function createSessions() {
+            const count = parseInt(sessionCount.value);
+            
+            if (!count || count < 1 || count > 500) {
+                showMessage('1-500 arasi gir', 'error');
+                return;
+            }
+
+            createSessionsBtn.disabled = true;
+            createSessionsBtn.innerHTML = '<span class="loading"></span> olusturuluyor...';
+            collectStatus.textContent = `${count} hesap olusturuluyor...`;
+
+            try {
+                const response = await fetch('/api/sessions/create', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ count: count })
+                });
+
+                const data = await response.json();
+                if (data.success) {
+                    showMessage(`${data.collected} session olusturuldu`, 'success');
+                    collectStatus.textContent = `✅ ${data.collected} ok / ${data.failed} fail`;
+                    await loadSessions();
+                } else {
+                    showMessage('hata: ' + data.error, 'error');
+                    collectStatus.textContent = `❌ ${data.error}`;
+                }
+            } catch (error) {
+                showMessage('baglanti hatasi', 'error');
+                collectStatus.textContent = `❌ ${error.message}`;
+            } finally {
+                createSessionsBtn.disabled = false;
+                createSessionsBtn.innerHTML = 'signup yap';
+            }
+        }
+
+        async function clearSessions() {
+            if (!confirm('Tum sessionlari silmek istediginizden emin misiniz?')) return;
+
+            clearSessionsBtn.disabled = true;
+            clearSessionsBtn.innerHTML = '<span class="loading"></span> siliniyor...';
+
+            try {
+                const response = await fetch('/api/sessions/clear', { method: 'POST' });
+                const data = await response.json();
+                if (data.success) {
+                    showMessage(data.message, 'success');
+                    loadSessions();
+                } else {
+                    showMessage(data.error, 'error');
+                }
+            } catch (error) {
+                showMessage('hata: ' + error.message, 'error');
+            } finally {
+                clearSessionsBtn.disabled = false;
+                clearSessionsBtn.innerHTML = 'hepsini sil';
+            }
+        }
+
+        async function deleteSession(sessionId) {
+            if (!confirm('Bu sessioni silmek istediginizden emin misiniz?')) return;
+
+            try {
+                const response = await fetch(`/api/sessions/${sessionId}`, { method: 'DELETE' });
+                const data = await response.json();
+                if (data.success) {
+                    showMessage(data.message, 'success');
+                    loadSessions();
+                } else {
+                    showMessage(data.error, 'error');
+                }
+            } catch (error) {
+                showMessage('hata: ' + error.message, 'error');
+            }
+        }
+
+        window.addEventListener('load', () => {
+            loadProxy();
+            loadSessions();
+        });
+    </script>
+</body>
+</html>

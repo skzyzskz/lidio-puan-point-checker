@@ -1,0 +1,31 @@
+# Sessions and databases
+sessions_database.json
+tokens_database.json
+proxy_config.json
+*.log
+
+# Results
+*_results.txt
+last_check_results.txt
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Proxy files
+cgrrr.txt

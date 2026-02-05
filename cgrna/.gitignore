@@ -1,0 +1,40 @@
+# Sessions and databases
+sessions_database.json
+tokens_database.json
+proxy_config.json
+*.log
+
+# Results
+turna_results.txt
+card_results.txt
+*_results.txt
+
+# Charles captures
+*.chlz
+chlz_extracted/
+
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS
+.DS_Store
+Thumbs.db
+
+
+
+
+
+
+
