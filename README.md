@@ -1,5 +1,6 @@
 # lidio-puan-point-checker
-fully reverse-engineered point checker for lidio, can be developed. tamamen geriye muhendislik yapilmis lidio odeme tabanli puan sorgulama araci, developlanabilir.
+- fully reverse-engineered point checker for lidio, can be developed. 
+- tamamen geriye muhendislik yapilmis lidio odeme tabanli puan sorgulama araci, developlanabilir.
 
 ## cgrtchibo
 
